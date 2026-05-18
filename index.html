@@ -1,1 +1,776 @@
-https://gemini.google.com/app/1c1bfbd404b440dd
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electricity Definitions</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .code-font {
+            font-family: 'JetBrains Mono', monospace;
+        }
+    </style>
+</head>
+<body class="bg-white text-slate-900 min-h-screen flex flex-col justify-between selection:bg-indigo-100 selection:text-indigo-900">
+
+    <!-- Minimalist Header Bar -->
+    <header class="bg-white border-b border-slate-100 py-5 px-6 sticky top-0 z-50">
+        <div class="max-w-3xl mx-auto grid grid-cols-3 items-center gap-2">
+            <!-- Lighter Grey Title (Left) -->
+            <h1 class="text-sm sm:text-xl font-bold text-slate-400 tracking-tight text-left truncate">Electricity Definitions</h1>
+            
+            <!-- Header Metrics Panel (Center) -->
+            <div id="header-metrics" class="hidden flex justify-center items-center gap-2 sm:gap-4 text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-wider">
+                <span id="header-progress">Question 1/38</span>
+                <span class="text-slate-300">|</span>
+                <span id="header-level" class="">Level 1/4</span>
+            </div>
+
+            <!-- Minimalist Red Timer, no background, no border (Right) -->
+            <div class="text-right">
+                <span id="timer-display" class="hidden code-font text-xs sm:text-sm font-extrabold text-red-600">15:00</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Floating Flat Workspace (No outer grey card backgrounds or shadows) -->
+    <main class="flex-grow flex flex-col items-center justify-center p-6 md:p-12">
+        <div class="w-full max-w-2xl flex flex-col transition-all duration-300">
+
+            <!-- 1. Start Screen (Flat White-on-White) -->
+            <div id="start-screen" class="flex flex-col items-center text-center py-12">
+                <h2 class="text-3xl font-black text-slate-950 tracking-tight mb-4">This quiz takes 15 minutes.</h2>
+                <p class="text-sm text-slate-500 max-w-md leading-relaxed mb-10">
+                    If you don't get enough questions correct, you will have to try again.
+                </p>
+                <button onclick="startQuiz()" class="px-8 py-3.5 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold rounded-xl shadow-sm transition-all transform hover:-translate-y-0.5">
+                    Start Quiz
+                </button>
+            </div>
+
+            <!-- 2. Active Quiz Screen -->
+            <div id="quiz-screen" class="hidden flex flex-col gap-8">
+                
+                <!-- Term Header -->
+                <div class="border-b border-slate-100 pb-5">
+                    <h3 id="question-term" class="text-2xl font-black text-slate-900 tracking-tight">Static electricity</h3>
+                </div>
+
+                <!-- Active Question Cloze Space -->
+                <div class="py-2 text-lg md:text-xl font-medium leading-relaxed text-slate-800" id="cloze-sentence">
+                    <!-- Populated dynamically -->
+                </div>
+
+                <!-- Interactive Work Block (MCQ Buttons or textboxes) -->
+                <div id="interaction-block" class="flex flex-col gap-4">
+                    <!-- Loaded dynamically per level -->
+                </div>
+
+                <!-- Bottom Continuation Actions -->
+                <div class="flex justify-end pt-4">
+                    <button id="action-btn" onclick="submitAnswer()" class="w-full sm:w-auto px-8 py-3.5 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold rounded-xl transition shadow-sm">
+                        Submit Answer
+                    </button>
+                </div>
+            </div>
+
+            <!-- 3. Result Screen -->
+            <div id="result-screen" class="hidden flex flex-col items-center text-center py-12">
+                <div id="result-badge" class="text-5xl mb-6">🏆</div>
+                <h2 id="result-title" class="text-3xl font-black text-slate-950 tracking-tight mb-4">Well done!</h2>
+                <p id="result-message" class="text-sm text-slate-500 max-w-md leading-relaxed mb-8">
+                    You completed all levels of the deck successfully within the 15-minute timeframe.
+                </p>
+                <button onclick="restartQuiz()" class="text-indigo-600 hover:text-indigo-800 font-bold text-sm transition focus:outline-none underline decoration-2 decoration-indigo-600/30 hover:decoration-indigo-800">
+                    Restart Quiz
+                </button>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Simple Flat Footer -->
+    <footer class="border-t border-slate-100 py-6 text-center text-xs text-slate-400 font-medium">
+        <div class="max-w-3xl mx-auto px-6 flex justify-center items-center">
+            <span>Press <kbd class="bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded text-slate-500 font-mono text-[10px]">Space</kbd> or <kbd class="bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded text-slate-500 font-mono text-[10px]">Enter</kbd> to submit/continue. You can also press the number keys to select.</span>
+        </div>
+    </footer>
+
+    <!-- Audio Player (Synthesized Web Audio API Sound Generator) -->
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function resumeAudio() {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function playTickSound() {
+            try {
+                resumeAudio();
+                const osc = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                osc.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+
+                osc.type = 'triangle';
+                // Quick wooden analog tick click
+                osc.frequency.setValueAtTime(1000, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(700, audioCtx.currentTime + 0.02);
+
+                gainNode.gain.setValueAtTime(0.012, audioCtx.currentTime); // very soft
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.02);
+
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.02);
+            } catch (e) {
+                // Audio context safety blocks
+            }
+        }
+
+        function playSound(success) {
+            try {
+                resumeAudio();
+                const now = audioCtx.currentTime;
+
+                if (success) {
+                    // Bright ascending success chime arpeggio
+                    const osc1 = audioCtx.createOscillator();
+                    const gain1 = audioCtx.createGain();
+                    osc1.connect(gain1);
+                    gain1.connect(audioCtx.destination);
+                    osc1.type = 'sine';
+                    osc1.frequency.setValueAtTime(523.25, now); // C5
+                    osc1.frequency.setValueAtTime(659.25, now + 0.07); // E5
+                    osc1.frequency.setValueAtTime(783.99, now + 0.14); // G5
+                    
+                    gain1.gain.setValueAtTime(0.04, now);
+                    gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+                    osc1.start();
+                    osc1.stop(now + 0.4);
+
+                    const osc2 = audioCtx.createOscillator();
+                    const gain2 = audioCtx.createGain();
+                    osc2.connect(gain2);
+                    gain2.connect(audioCtx.destination);
+                    osc2.type = 'sine';
+                    osc2.frequency.setValueAtTime(1046.50, now + 0.14); // C6
+                    
+                    gain2.gain.setValueAtTime(0.015, now + 0.14);
+                    gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+                    osc2.start();
+                    osc2.stop(now + 0.5);
+                } else {
+                    // Descending retro low buzzer
+                    const osc = audioCtx.createOscillator();
+                    const gainNode = audioCtx.createGain();
+                    osc.connect(gainNode);
+                    gainNode.connect(audioCtx.destination);
+
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(145, now);
+                    osc.frequency.setValueAtTime(115, now + 0.08);
+
+                    gainNode.gain.setValueAtTime(0.05, now);
+                    gainNode.gain.setValueAtTime(0.05, now + 0.08);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+
+                    osc.start();
+                    osc.stop(now + 0.3);
+                }
+            } catch (e) {
+                // Audio context safety blocks
+            }
+        }
+    </script>
+
+    <!-- State Management & Definitions -->
+    <script>
+        const cardsData = [
+            {
+                term: "Static electricity",
+                definition: "Static electricity is an imbalance of electric charges within or on the surface of a material.",
+                maori: "hikotū",
+                clozes: [
+                    { word: "imbalance", distractors: ["balance", "flow", "accumulation", "overload"] },
+                    { word: "charges", distractors: ["poles", "currents", "atoms", "voltages"] },
+                    { word: "surface", distractors: ["center", "nucleus", "ground", "insulator"] }
+                ]
+            },
+            {
+                term: "Current electricity",
+                definition: "Current electricity is the flow of electrical charge, or the movement of charge carriers.",
+                maori: "iahiko",
+                clozes: [
+                    { word: "flow", distractors: ["stagnation", "blockage", "imbalance", "creation"] },
+                    { word: "charge", distractors: ["force", "energy", "gravity", "fields"] },
+                    { word: "movement", distractors: ["vibration", "disappearance", "resistance", "heating"] },
+                    { word: "carriers", distractors: ["insulators", "voltages", "dielectrics", "resistors"] }
+                ]
+            },
+            {
+                term: "Electric charge",
+                definition: "Electric charge is a basic property of matter. Charge can be positive or negative.",
+                maori: "utanga hiko",
+                clozes: [
+                    { word: "property", distractors: ["state", "particle", "measurement", "force"] },
+                    { word: "positive", distractors: ["neutral", "conductive", "resistive", "static"] },
+                    { word: "negative", distractors: ["neutral", "active", "charged", "grounded"] }
+                ]
+            },
+            {
+                term: "Charge carriers",
+                definition: "Charge carriers are charged particles that move through a conductor or through an electrolyte.",
+                maori: "kawe utanga",
+                clozes: [
+                    { word: "particles", distractors: ["waves", "atoms", "chemicals", "forces"] },
+                    { word: "conductor", distractors: ["insulator", "resistor", "battery", "switch"] },
+                    { word: "electrolyte", distractors: ["electrode", "insulator", "vacuum", "filament"] }
+                ]
+            },
+            {
+                term: "Negative charge",
+                definition: "The type of electrical charge electrons have. Objects with more electrons than protons have a negative charge.",
+                maori: "whana tōraro",
+                clozes: [
+                    { word: "electrons", distractors: ["protons", "neutrons", "ions", "atoms"] },
+                    { word: "more", distractors: ["fewer", "equal", "no", "different"] },
+                    { word: "protons", distractors: ["neutrons", "quarks", "molecules", "atoms"] }
+                ]
+            },
+            {
+                term: "Positive charge",
+                definition: "The type of electrical charge protons have. Objects with fewer electrons than protons have a positive charge.",
+                maori: "whana tōrunga",
+                clozes: [
+                    { word: "protons", distractors: ["electrons", "neutrons", "photons", "atoms"] },
+                    { word: "fewer", distractors: ["more", "equal", "unlimited", "no"] },
+                    { word: "electrons", distractors: ["protons", "neutrons", "nuclei", "ions"] }
+                ]
+            },
+            {
+                term: "Conductor",
+                definition: "A conductor is a material through which an electric current can pass.",
+                maori: "pūkawe hiko",
+                clozes: [
+                    { word: "material", distractors: ["vacuum", "force", "energy", "wave"] },
+                    { word: "current", distractors: ["voltage", "charge", "resistance", "static"] },
+                    { word: "pass", distractors: ["stop", "reflect", "dissolve", "insulate"] }
+                ]
+            },
+            {
+                term: "Insulator",
+                definition: "An insulator is a material that does not allow charge to flow easily.",
+                maori: "tākai-iahiko",
+                clozes: [
+                    { word: "material", distractors: ["vacuum", "field", "energy", "force"] },
+                    { word: "flow", distractors: ["stop", "discharge", "charge", "oppose"] },
+                    { word: "easily", distractors: ["at all", "rapidly", "temporarily", "efficiently"] }
+                ]
+            },
+            {
+                term: "Ammeter",
+                definition: "An ammeter is an instrument used to measure the current flowing through a section of the electric circuit.",
+                maori: "ine-iahiko",
+                clozes: [
+                    { word: "instrument", distractors: ["formula", "unit", "conductor", "component"] },
+                    { word: "measure", distractors: ["generate", "reduce", "resist", "regulate"] },
+                    { word: "current", distractors: ["voltage", "resistance", "power", "energy"] },
+                    { word: "circuit", distractors: ["generator", "resistor", "ground", "insulator"] }
+                ]
+            },
+            {
+                term: "Voltage",
+                definition: "Voltage is the potential difference between two points of a component in an electric circuit.",
+                maori: "ngaohiko",
+                clozes: [
+                    { word: "potential difference", distractors: ["current flow", "electric charge", "electrical resistance", "kinetic energy"] },
+                    { word: "points", distractors: ["conductors", "charges", "currents", "electrons"] },
+                    { word: "component", distractors: ["generator", "insulator", "voltmeter", "battery"] }
+                ]
+            },
+            {
+                term: "Volt",
+                definition: "The volt is the unit of voltage or potential difference.",
+                maori: "vōta",
+                clozes: [
+                    { word: "unit", distractors: ["instrument", "symbol", "formula", "quantity"] },
+                    { word: "voltage", distractors: ["current", "resistance", "power", "charge"] },
+                    { word: "potential difference", distractors: ["current flow", "magnetic force", "charge movement", "static build-up"] }
+                ]
+            },
+            {
+                term: "Voltmeter",
+                definition: "A voltmeter is an instrument used to measure voltage or potential difference.",
+                maori: "ine-ngaohiko",
+                clozes: [
+                    { word: "instrument", distractors: ["component", "formula", "unit", "symbol"] },
+                    { word: "measure", distractors: ["generate", "regulate", "block", "absorb"] },
+                    { word: "voltage", distractors: ["current", "resistance", "charge", "power"] }
+                ]
+            }
+        ];
+
+        let state = {
+            started: false,
+            ended: false,
+            timeLeft: 900, // 15 minutes
+            timerInterval: null,
+            currentLevel: 1, // 1, 2, 3, or 4
+            deck: [], // active shuffled list
+            deckIndex: 0,
+            hasEvaluated: false,
+            level4Completed: false,
+            selectedAnswer: null,
+            originalDeckSize: 0,
+            correctCount: 0 // Track successful correct answers in the current level
+        };
+
+        // Standardized cleaning normalization
+        function normalizeText(str) {
+            return str.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").replace(/\s+/g, " ").trim();
+        }
+
+        // Fisher-Yates Shuffling
+        function shuffleDeck(array) {
+            let copy = [...array];
+            for (let i = copy.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [copy[i], copy[j]] = [copy[j], copy[i]];
+            }
+            return copy;
+        }
+
+        function generateLevel1Deck() {
+            let items = [];
+            cardsData.forEach((card, cIdx) => {
+                card.clozes.forEach((cloze, clIdx) => {
+                    items.push({
+                        cardIndex: cIdx,
+                        clozeIndex: clIdx,
+                        word: cloze.word,
+                        distractors: cloze.distractors,
+                        term: card.term,
+                        maori: card.maori,
+                        definition: card.definition
+                    });
+                });
+            });
+            return shuffleDeck(items);
+        }
+
+        function generateLevel2Deck() {
+            let items = [];
+            cardsData.forEach((card, cIdx) => {
+                card.clozes.forEach((cloze, clIdx) => {
+                    items.push({
+                        cardIndex: cIdx,
+                        clozeIndex: clIdx,
+                        word: cloze.word,
+                        term: card.term,
+                        maori: card.maori,
+                        definition: card.definition
+                    });
+                });
+            });
+            return shuffleDeck(items);
+        }
+
+        function generateLevel3Deck() {
+            let items = [];
+            cardsData.forEach((card, cIdx) => {
+                items.push({
+                    cardIndex: cIdx,
+                    term: card.term,
+                    maori: card.maori,
+                    definition: card.definition,
+                    clozes: card.clozes
+                });
+            });
+            return shuffleDeck(items);
+        }
+
+        function generateLevel4Deck() {
+            let items = [];
+            cardsData.forEach((card, cIdx) => {
+                items.push({
+                    cardIndex: cIdx,
+                    term: card.term,
+                    maori: card.maori,
+                    definition: card.definition
+                });
+            });
+            return shuffleDeck(items);
+        }
+
+        function startQuiz() {
+            state.started = true;
+            state.ended = false;
+            state.timeLeft = 900;
+            state.currentLevel = 1;
+            state.level4Completed = false;
+            state.deck = generateLevel1Deck();
+            state.deckIndex = 0;
+            state.correctCount = 0;
+            state.originalDeckSize = state.deck.length;
+            state.hasEvaluated = false;
+
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.remove('hidden');
+            document.getElementById('header-metrics').classList.remove('hidden');
+            document.getElementById('timer-display').classList.remove('hidden');
+
+            startTimer();
+            renderQuestion();
+        }
+
+        function startTimer() {
+            if (state.timerInterval) clearInterval(state.timerInterval);
+            updateTimerDisplay();
+            state.timerInterval = setInterval(() => {
+                state.timeLeft--;
+                updateTimerDisplay();
+                playTickSound(); // Quiet ticking sound plays every second
+                if (state.timeLeft <= 0) {
+                    clearInterval(state.timerInterval);
+                    finishQuiz();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(state.timeLeft / 60);
+            const seconds = state.timeLeft % 60;
+            document.getElementById('timer-display').innerText = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function renderQuestion() {
+            const currentItem = state.deck[state.deckIndex];
+            const clozeBlock = document.getElementById('cloze-sentence');
+            const interactionBlock = document.getElementById('interaction-block');
+            const actionBtn = document.getElementById('action-btn');
+
+            state.hasEvaluated = false;
+            actionBtn.innerText = "Submit Answer";
+
+            // Update Header Stats (Guarantees we never exceed the original deck length representation)
+            const displayQuestionNum = Math.min(state.correctCount + 1, state.originalDeckSize);
+            document.getElementById('header-level').innerText = `Level ${state.currentLevel}/4`;
+            document.getElementById('header-progress').innerText = `Question ${displayQuestionNum}/${state.originalDeckSize}`;
+
+            // Combine term with Māori spelling in the header as requested
+            const termWithMaori = currentItem.maori ? `${currentItem.term} (${currentItem.maori})` : currentItem.term;
+            document.getElementById('question-term').innerText = termWithMaori;
+
+            if (state.currentLevel === 1) {
+                clozeBlock.innerHTML = maskWordWithUnderscores(currentItem.definition, currentItem.word);
+                
+                // Shuffle and strictly select exactly 3 distractors to keep exactly 4 options in total
+                const limitedDistractors = shuffleDeck(currentItem.distractors).slice(0, 3);
+                const options = shuffleDeck([currentItem.word, ...limitedDistractors]);
+                
+                interactionBlock.innerHTML = `
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="mcq-options-grid">
+                        ${options.map((opt, idx) => `
+                            <button onclick="selectMCQOption('${opt.replace(/'/g, "\\'")}', ${idx})" 
+                                    id="option-btn-${idx}" 
+                                    class="p-4 text-left border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold rounded-xl text-sm transition-all flex justify-between items-center outline-none">
+                                <span>${opt}</span>
+                                <span class="text-xs font-mono bg-slate-100 px-2 py-0.5 rounded border border-slate-200 text-slate-500">${idx + 1}</span>
+                            </button>
+                        `).join('')}
+                    </div>
+                `;
+                state.selectedAnswer = null;
+
+            } else if (state.currentLevel === 2) {
+                clozeBlock.innerHTML = maskWordWithUnderscores(currentItem.definition, currentItem.word);
+                
+                interactionBlock.innerHTML = `
+                    <div class="flex flex-col gap-2">
+                        <input type="text" id="cloze-single-input" autocomplete="off"
+                               class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-slate-800 font-semibold focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none text-base placeholder:text-slate-300"
+                               placeholder="Type the missing word..." />
+                    </div>
+                `;
+                setTimeout(() => {
+                    const input = document.getElementById('cloze-single-input');
+                    if (input) input.focus();
+                }, 50);
+
+            } else if (state.currentLevel === 3) {
+                // Inline inputs replacing all matching keywords
+                let runningMarkup = currentItem.definition;
+                currentItem.clozes.forEach((cl, idx) => {
+                    const inputWidth = Math.max(90, cl.word.length * 9 + 25);
+                    const inputEl = `<input type="text" id="cloze-multi-input-${idx}" autocomplete="off"
+                        class="inline-block border-b-2 border-indigo-400 focus:border-indigo-600 bg-indigo-50/20 px-2 py-0.5 text-center text-indigo-700 font-extrabold focus:outline-none rounded transition-all text-sm outline-none" 
+                        style="width: ${inputWidth}px" placeholder="......" />`;
+                    
+                    const regex = new RegExp(`\\b${escapeRegExp(cl.word)}\\b`, 'gi');
+                    runningMarkup = runningMarkup.replace(regex, inputEl);
+                });
+
+                clozeBlock.innerHTML = runningMarkup;
+                interactionBlock.innerHTML = ""; 
+
+                setTimeout(() => {
+                    const firstInput = document.getElementById('cloze-multi-input-0');
+                    if (firstInput) firstInput.focus();
+                }, 50);
+
+            } else if (state.currentLevel === 4) {
+                clozeBlock.innerHTML = `<span class="text-slate-400 text-sm font-semibold italic">Write the exact definition below:</span>`;
+                
+                interactionBlock.innerHTML = `
+                    <div class="flex flex-col gap-2">
+                        <textarea id="full-definition-input" rows="4" autocomplete="off"
+                                  class="w-full bg-white border border-slate-200 rounded-xl p-4 text-slate-800 font-semibold focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none text-base placeholder:text-slate-300 resize-none"
+                                  placeholder="Type the full definition from memory..."></textarea>
+                    </div>
+                `;
+                setTimeout(() => {
+                    const textarea = document.getElementById('full-definition-input');
+                    if (textarea) textarea.focus();
+                }, 50);
+            }
+        }
+
+        // Mask function displaying strong underlined dots for high clarity
+        function maskWordWithUnderscores(text, word) {
+            const regex = new RegExp(`\\b${escapeRegExp(word)}\\b`, 'gi');
+            return text.replace(regex, `<span class="text-indigo-600 font-black tracking-widest px-1">______</span>`);
+        }
+
+        function escapeRegExp(string) {
+            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+
+        function selectMCQOption(value, idx) {
+            if (state.hasEvaluated) return;
+            state.selectedAnswer = value;
+
+            const grid = document.getElementById('mcq-options-grid');
+            const buttons = grid.getElementsByTagName('button');
+            for (let btn of buttons) {
+                btn.className = "p-4 text-left border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold rounded-xl text-sm transition-all flex justify-between items-center outline-none";
+            }
+            document.getElementById(`option-btn-${idx}`).className = "p-4 text-left border-2 border-indigo-500 bg-indigo-50/50 text-indigo-700 font-bold rounded-xl text-sm transition-all flex justify-between items-center outline-none";
+        }
+
+        function submitAnswer() {
+            if (state.ended) return;
+
+            const actionBtn = document.getElementById('action-btn');
+
+            if (state.hasEvaluated) {
+                state.hasEvaluated = false;
+                state.deckIndex++;
+
+                if (state.deckIndex >= state.deck.length) {
+                    transitionLevel();
+                } else {
+                    renderQuestion();
+                }
+                return;
+            }
+
+            const currentItem = state.deck[state.deckIndex];
+            let isCorrect = false;
+
+            if (state.currentLevel === 1) {
+                if (!state.selectedAnswer) return; // Prevent empty click
+                isCorrect = normalizeText(state.selectedAnswer) === normalizeText(currentItem.word);
+                
+                // Colorize grid options
+                const grid = document.getElementById('mcq-options-grid');
+                const buttons = grid.getElementsByTagName('button');
+                for (let btn of buttons) {
+                    const optText = btn.getElementsByTagName('span')[0].innerText;
+                    if (normalizeText(optText) === normalizeText(currentItem.word)) {
+                        btn.className = "p-4 text-left border-2 border-emerald-500 bg-emerald-50 text-emerald-800 font-bold rounded-xl text-sm flex justify-between items-center outline-none";
+                    } else if (normalizeText(optText) === normalizeText(state.selectedAnswer)) {
+                        btn.className = "p-4 text-left border-2 border-rose-500 bg-rose-50 text-rose-800 font-bold rounded-xl text-sm flex justify-between items-center outline-none";
+                    } else {
+                        btn.className = "p-4 text-left border border-slate-100 bg-white text-slate-300 rounded-xl text-sm flex justify-between items-center outline-none opacity-40";
+                    }
+                }
+
+                if (isCorrect) {
+                    state.correctCount++;
+                } else {
+                    state.deck.push(currentItem); // loop back
+                }
+
+            } else if (state.currentLevel === 2) {
+                const typed = document.getElementById('cloze-single-input').value.trim();
+                isCorrect = normalizeText(typed) === normalizeText(currentItem.word);
+
+                const inputField = document.getElementById('cloze-single-input');
+                inputField.disabled = true;
+
+                if (isCorrect) {
+                    state.correctCount++;
+                    inputField.className = "w-full border-2 border-emerald-500 bg-emerald-50/50 rounded-xl px-4 py-3 text-emerald-800 font-bold outline-none text-base";
+                } else {
+                    inputField.className = "w-full border-2 border-rose-500 bg-rose-50/50 rounded-xl px-4 py-3 text-rose-800 font-bold outline-none text-base";
+                    inputField.value = currentItem.word; // Show correct spelling inside input box
+                    state.deck.push(currentItem);
+                }
+
+            } else if (state.currentLevel === 3) {
+                isCorrect = true;
+                let misaligned = 0;
+
+                currentItem.clozes.forEach((cl, idx) => {
+                    const inputEl = document.getElementById(`cloze-multi-input-${idx}`);
+                    const val = inputEl.value.trim();
+                    const clCorrect = normalizeText(val) === normalizeText(cl.word);
+                    inputEl.disabled = true;
+
+                    if (clCorrect) {
+                        inputEl.className = "inline-block border-b-2 border-emerald-500 bg-emerald-50 text-emerald-700 font-extrabold text-center rounded text-sm px-2 py-0.5 outline-none";
+                    } else {
+                        isCorrect = false;
+                        misaligned++;
+                        inputEl.className = "inline-block border-b-2 border-rose-500 bg-rose-50 text-rose-700 font-extrabold text-center rounded text-sm px-2 py-0.5 outline-none";
+                        inputEl.value = cl.word; // Show correct spelling inside input box
+                    }
+                });
+
+                if (isCorrect) {
+                    state.correctCount++;
+                } else {
+                    state.deck.push(currentItem);
+                }
+
+            } else if (state.currentLevel === 4) {
+                const typedDef = document.getElementById('full-definition-input').value.trim();
+                isCorrect = normalizeText(typedDef) === normalizeText(currentItem.definition);
+
+                const inputArea = document.getElementById('full-definition-input');
+                inputArea.disabled = true;
+
+                if (isCorrect) {
+                    state.correctCount++;
+                    inputArea.className = "w-full bg-emerald-50/50 border-2 border-emerald-500 rounded-xl p-4 text-emerald-800 font-semibold outline-none text-base resize-none";
+                } else {
+                    inputArea.className = "w-full bg-rose-50/50 border-2 border-rose-500 rounded-xl p-4 text-rose-800 font-semibold outline-none text-base resize-none";
+                    inputArea.value = currentItem.definition; // Show correct full definition inside textarea
+                    state.deck.push(currentItem);
+                }
+            }
+
+            playSound(isCorrect);
+            state.hasEvaluated = true;
+            actionBtn.innerText = "Continue (Space / Enter)";
+            
+            // Refocus button to prevent focus loss on keyboard continue
+            actionBtn.focus();
+        }
+
+        function transitionLevel() {
+            if (state.currentLevel === 1) {
+                state.currentLevel = 2;
+                state.deck = generateLevel2Deck();
+                state.deckIndex = 0;
+                state.correctCount = 0;
+                state.originalDeckSize = state.deck.length;
+                renderQuestion();
+            } else if (state.currentLevel === 2) {
+                state.currentLevel = 3;
+                state.deck = generateLevel3Deck();
+                state.deckIndex = 0;
+                state.correctCount = 0;
+                state.originalDeckSize = state.deck.length;
+                renderQuestion();
+            } else if (state.currentLevel === 3) {
+                state.currentLevel = 4;
+                state.deck = generateLevel4Deck();
+                state.deckIndex = 0;
+                state.correctCount = 0;
+                state.originalDeckSize = state.deck.length;
+                renderQuestion();
+            } else if (state.currentLevel === 4) {
+                state.level4Completed = true;
+                finishQuiz();
+            }
+        }
+
+        function finishQuiz() {
+            clearInterval(state.timerInterval);
+            state.ended = true;
+
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('header-metrics').classList.add('hidden');
+            document.getElementById('timer-display').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+
+            const icon = document.getElementById('result-badge');
+            const title = document.getElementById('result-title');
+            const message = document.getElementById('result-message');
+
+            if (state.level4Completed) {
+                icon.innerText = "🏆";
+                title.innerText = "Well done!";
+                message.innerHTML = `You completed all 4 levels of definition testing within the 15-minute period! Your exact phrasing memory is verified.`;
+            } else {
+                icon.innerText = "⏳";
+                title.innerText = "Time Expired";
+                message.innerHTML = `You didn't complete enough questions inside the 15-minute timeframe. Keep practicing to recall standard scientific terms faster.`;
+            }
+        }
+
+        function restartQuiz() {
+            startQuiz();
+        }
+
+        window.onkeydown = function(e) {
+            if (!state.started) {
+                if (e.key === ' ' || e.key === 'Enter') {
+                    e.preventDefault();
+                    startQuiz();
+                }
+                return;
+            }
+            if (state.ended) return;
+
+            const activeTag = document.activeElement ? document.activeElement.tagName.toLowerCase() : "";
+            
+            // Allow typing inside form elements without immediately triggering quiz continue on Space
+            if (activeTag === 'input' || activeTag === 'textarea') {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    submitAnswer();
+                }
+                return;
+            }
+
+            // Universal quiz workflow triggers
+            if (e.key === ' ' || e.key === 'Enter') {
+                e.preventDefault();
+                submitAnswer();
+            } else if (state.currentLevel === 1 && !state.hasEvaluated && ['1', '2', '3', '4'].includes(e.key)) {
+                e.preventDefault();
+                const optionIdx = parseInt(e.key) - 1;
+                const grid = document.getElementById('mcq-options-grid');
+                if (grid) {
+                    const buttons = grid.getElementsByTagName('button');
+                    if (buttons[optionIdx]) {
+                        buttons[optionIdx].click();
+                    }
+                }
+            }
+        };
+    </script>
+</body>
+</html>
