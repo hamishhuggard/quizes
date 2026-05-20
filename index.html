@@ -201,9 +201,124 @@
 
     <!-- State Management & Definitions -->
     <script>
-        const levels = [3];
+        const levels = [4];
 
         const cardsData = [
+              {
+                "term": "Static electricity",
+                "definition": "Static electricity is an imbalance of electric charges within or on the surface of a material.",
+                "maori": "hiko pateko",
+                "clozes": [
+                  { "word": "imbalance", "distractors": ["flow", "current", "circuit", "destruction"] },
+                  { "word": "charges", "distractors": ["atoms", "magnets", "voltages", "chemicals"] },
+                  { "word": "surface", "distractors": ["center", "nucleus", "inside", "wires"] }
+                ]
+              },
+              {
+                "term": "Electric charge",
+                "definition": "Electric charge is a basic property of matter. Charge can be positive (like protons) or negative (like electrons).",
+                "maori": "tupuranga hiko",
+                "clozes": [
+                  { "word": "property", "distractors": ["formula", "reaction", "chemical", "mixture"] },
+                  { "word": "protons", "distractors": ["neutrons", "insulators", "cells", "currents"] },
+                  { "word": "electrons", "distractors": ["atoms", "metals", "magnets", "circuits"] }
+                ]
+              },
+              {
+                "term": "The Law of Attraction",
+                "definition": "The Law of Attraction states that like charges repel and unlike charges attract.",
+                "maori": "ture kume hiko",
+                "clozes": [
+                  { "word": "like", "distractors": ["opposite", "unlike", "different", "neutral"] },
+                  { "word": "repel", "distractors": ["attract", "combine", "absorb", "destroy"] },
+                  { "word": "attract", "distractors": ["repel", "scatter", "bounce", "isolate"] }
+                ]
+              },
+              {
+                "term": "Charging bodies",
+                "definition": "Charging bodies involves the adding or removing of electrons.",
+                "maori": "whakawhana hiko",
+                "clozes": [
+                  { "word": "Charging", "distractors": ["Melting", "Heating", "Insulating", "Grounding"] },
+                  { "word": "removing", "distractors": ["destroying", "creating", "freezing", "balancing"] },
+                  { "word": "electrons", "distractors": ["protons", "neutrons", "atoms", "nuclei"] }
+                ]
+              },
+              {
+                "term": "Friction",
+                "definition": "Friction is the rubbing together of two objects that causes negative electrons to transfer from one to another.",
+                "maori": "mirimiri",
+                "clozes": [
+                  { "word": "rubbing", "distractors": ["separating", "heating", "cooling", "melting"] },
+                  { "word": "electrons", "distractors": ["protons", "neutrons", "atoms", "bonds"] },
+                  { "word": "transfer", "distractors": ["vanish", "multiply", "freeze", "shrink"] }
+                ]
+              },
+              {
+                "term": "Proton Stability",
+                "definition": "You cannot charge a surface by transferring protons because they are locked inside the nucleus and cannot move.",
+                "maori": "pūmau iraura",
+                "clozes": [
+                  { "word": "protons", "distractors": ["electrons", "charges", "currents", "insulators"] },
+                  { "word": "nucleus", "distractors": ["surface", "outer shell", "orbit", "duster"] },
+                  { "word": "move", "distractors": ["stay", "exist", "vibrate", "repel"] }
+                ]
+              },
+              {
+                "term": "Neutral Object",
+                "definition": "A neutral object contains an equal number of positive protons and negative electrons, meaning it has no net charge.",
+                "maori": "tūpā",
+                "clozes": [
+                  { "word": "equal", "distractors": ["unequal", "random", "changing", "massive"] },
+                  { "word": "protons", "distractors": ["neutrons", "insulators", "currents", "switches"] },
+                  { "word": "electrons", "distractors": ["atoms", "magnets", "metals", "cells"] }
+                ]
+              },
+              {
+                "term": "Electrons",
+                "definition": "Two electrons will repel each other because they have alike charges.",
+                "maori": "pana irihiko",
+                "clozes": [
+                  { "word": "repel", "distractors": ["attract", "ignore", "combine", "destroy"] },
+                  { "word": "alike", "distractors": ["opposite", "unlike", "neutral", "different"] }
+                ]
+              },
+              {
+                "term": "Protons",
+                "definition": "Two protons will repel each other because they have alike charges.",
+                "maori": "pana iraura",
+                "clozes": [
+                  { "word": "repel", "distractors": ["attract", "absorb", "scatter", "dissolve"] },
+                  { "word": "alike", "distractors": ["unlike", "opposite", "neutral", "variable"] }
+                ]
+              },
+              {
+                "term": "Attraction",
+                "definition": "An electron and a proton will attract each other because they have unalike charges.",
+                "maori": "kume ira-irihiko",
+                "clozes": [
+                  { "word": "attract", "distractors": ["repel", "push", "block", "isolate"] },
+                  { "word": "unalike", "distractors": ["alike", "identical", "equal", "same"] }
+                ]
+              },
+              {
+                "term": "Same charges",
+                "definition": "If you bring two objects with the same positive charge close together, they will repel each other.",
+                "maori": "amana tōmuri",
+                "clozes": [
+                  { "word": "repel", "distractors": ["attract", "pull", "touch", "stretch"] }
+                ]
+              },
+              {
+                "term": "Opposite charges",
+                "definition": "If you bring a negatively charged rod near a positively charged cloth, they will attract each other.",
+                "maori": "amana kume hiko",
+                "clozes": [
+                  { "word": "attract", "distractors": ["repel", "scatter", "bounce", "ignore"] }
+                ]
+              }
+
+            /*
             {
                 term: "Static electricity",
                 definition: "Static electricity is an imbalance of electric charges within or on the surface of a material.",
@@ -324,6 +439,7 @@
                     { word: "difference", distractors: ["flow", "charge", "power", "energy"] }
                 ]
             }
+            */
         ];
 
         let state = {
