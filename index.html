@@ -201,9 +201,167 @@
 
     <!-- State Management & Definitions -->
     <script>
-        const levels = [4];
+        const levels = [3];
 
         const cardsData = [
+          {
+            "term": "",
+            "definition": "Wires are often made of copper because copper is a conductor so electrons can slide from atom to atom to carry electricity.",
+            "maori": "",
+            "clozes": [
+              { "word": "electrons", "distractors": ["protons", "neutrons", "atoms", "nuclei"] },
+              { "word": "conductor", "distractors": ["conductor", "insulator"] }
+            ]
+          },
+          {
+            "term": "",
+            "definition": "Electricians wear heavy rubber boots because rubber is an insulator and stops electricity flowing through them.",
+            "maori": "",
+            "clozes": [
+              { "word": "insulator", "distractors": ["conductor", "battery", "switch", "metal"] },
+              { "word": "stops", "distractors": ["helps", "speeds", "creates", "starts"] }
+            ]
+          },
+          /*
+          {
+            "term": "",
+            "definition": "If you plug an aluminium rod into an open testing loop with a power cell, the light bulb will turn on immediately.",
+            "maori": "pūkawe hiko",
+            "clozes": [
+              { "word": "aluminum", "distractors": ["plastic", "rubber", "glass", "wooden"] },
+              { "word": "on", "distractors": ["off", "dimmer", "green", "flicker"] }
+            ]
+          },
+          */
+          {
+            "term": "Conductor",
+            "definition": "A conductor is a material through which an electric current can pass.",
+            "maori": "pūkawe hiko",
+            "clozes": [
+              { "word": "current", "distractors": ["insulator", "friction", "magnet", "battery"] }
+            ]
+          },
+          {
+            "term": "Insulator",
+            "definition": "An insulator is a material that does not allow charge to flow easily.",
+            "maori": "mouku hiko",
+            "clozes": [
+              { "word": "allow", "distractors": ["force", "attract", "help", "push"] }
+            ]
+          },
+          {
+            "term": "",
+            "definition": "In substances such as metals, electrons can separate from the atoms and move freely.",
+            "maori": "",
+            "clozes": [
+              { "word": "electrons", "distractors": ["protons", "neutrons", "atoms", "nuclei"] },
+              { "word": "separate", "distractors": ["protons", "neutrons", "atoms", "nuclei"] },
+              { "word": "freely", "distractors": ["tightly", "slowly", "never", "hardly"] }
+            ]
+          },
+          {
+            "term": "",
+            "definition": "In substances such as plastic, rubber, wood, glass, or ceramic the atoms hold on to their electrons, so charge cannot pass.",
+            "maori": "",
+            "clozes": [
+              { "word": "cannot", "distractors": ["must", "easily", "quickly", "always"] },
+              { "word": "separate", "distractors": ["protons", "neutrons", "atoms", "nuclei"] },
+              { "word": "cannot", "distractors": ["protons", "neutrons", "atoms", "nuclei"] }
+            ]
+          },
+          {
+            "term": "",
+            "definition": "Aluminium is a conductor because it is a metal, so the electrons can move freely from the atoms.",
+            "maori": "",
+            "clozes": [
+              { "word": "metal", "distractors": ["plastic", "rubber", "wood", "glass"] }
+            ]
+          },
+          {
+            "term": "",
+            "definition": "Rubber atoms hold tighter onto their electrons than iron atoms do, because rubber is an insulator.",
+            "maori": "",
+            "clozes": [
+              { "word": "tighter", "distractors": ["looser", "freely", "weakly", "randomly"] }
+            ]
+          },
+          {
+            "term": "",
+            "definition": "Metal atoms hold on to their electrons loosely so that they can flow through a circuit.",
+            "maori": "",
+            "clozes": [
+              { "word": "electrons", "distractors": ["protons", "neutrons", "nuclei", "atoms"] }
+            ]
+          },
+          {
+            "term": "",
+            "definition": "Plastic is used to coat the handles of tools because it is an insulator, so electricity cannot flow into your hand.",
+            "maori": "",
+            "clozes": [
+              { "word": "insulator", "distractors": ["conductor", "wire", "metal", "magnet"] }
+            ]
+          },
+          {
+            "term": "",
+            "definition": "Iron nails are used in testing loops to turn on the bulb because iron is a conductor.",
+            "maori": "",
+            "clozes": [
+              { "word": "conductor", "distractors": ["insulator", "barrier", "resistor", "switch"] }
+            ]
+          },
+              {
+                "term": "Conductor",
+                "definition": "A conductor is a material through which an electric current can pass because its free electrons can separate from the atoms and move easily.",
+                "maori": "pūkawe hiko",
+                "clozes": [
+                  { "word": "current", "distractors": ["charge", "insulation", "friction", "voltage"] },
+                  { "word": "electrons", "distractors": ["protons", "neutrons", "nuclei", "positrons"] },
+                  { "word": "atoms", "distractors": ["cells", "bonds", "mixtures", "liquids"] }
+                ]
+              },
+              {
+                "term": "Insulator",
+                "definition": "An insulator is a material that does not allow charge to flow easily because its atoms hold tightly onto their electrons.",
+                "maori": "",
+                "clozes": [
+                  { "word": "allow", "distractors": ["force", "attract", "accelerate", "destroy"] },
+                  { "word": "tightly", "distractors": ["loosely", "freely", "randomly", "weakly"] },
+                  { "word": "flow", "distractors": ["freeze", "separate", "charge", "contract"] }
+                ]
+              },
+            {
+                term: "Current electricity",
+                definition: "Current electricity is the flow of electrical charge, or the movement of charge carriers.",
+                maori: "",
+                clozes: [
+                    { word: "flow", distractors: ["stagnation", "blockage", "imbalance", "creation"] },
+                    { word: "charge", distractors: ["force", "energy", "gravity", "fields"] },
+                    { word: "movement", distractors: ["vibration", "disappearance", "resistance", "heating"] },
+                    { word: "carriers", distractors: ["insulators", "voltages", "dielectrics", "resistors"] }
+                ]
+            },
+            {
+                term: "Ammeter",
+                definition: "An ammeter is an instrument used to measure the current flowing through a section of the electric circuit.",
+                maori: "ine-iahiko",
+                clozes: [
+                    { word: "instrument", distractors: ["formula", "unit", "conductor", "component"] },
+                    { word: "measure", distractors: ["generate", "reduce", "resist", "regulate"] },
+                    { word: "current", distractors: ["voltage", "resistance", "power", "energy"] },
+                    { word: "circuit", distractors: ["generator", "resistor", "ground", "insulator"] }
+                ]
+            },
+              {
+                "term": "The Law of Attraction",
+                "definition": "The Law of Attraction states that like charges repel and unlike charges attract.",
+                "maori": "ture kume hiko",
+                "clozes": [
+                  { "word": "like", "distractors": ["opposite", "unlike", "different", "neutral"] },
+                  { "word": "repel", "distractors": ["attract", "combine", "absorb", "destroy"] },
+                  { "word": "attract", "distractors": ["repel", "scatter", "bounce", "isolate"] }
+                ]
+              },
+            /*
               {
                 "term": "Static electricity",
                 "definition": "Static electricity is an imbalance of electric charges within or on the surface of a material.",
@@ -317,6 +475,7 @@
                   { "word": "attract", "distractors": ["repel", "scatter", "bounce", "ignore"] }
                 ]
               }
+            */
 
             /*
             {
@@ -719,7 +878,7 @@
             document.getElementById('result-screen').classList.remove('hidden');
 
             const message = document.getElementById('result-message');
-            message.innerHTML = `congratulations <span class="text-indigo-600">${state.userName}</span>! you completed the quiz in <span class="text-slate-950 font-bold">${formatTime(state.timeElapsed)}</span>`;
+                                          message.innerHTML = `congratulations <span class="text-indigo-600">${state.userName}</span>! you completed the <em>static electricity</em> quiz in <span class="text-slate-950 font-bold">${formatTime(state.timeElapsed)}</span>`;
         }
 
         function restartQuiz() {
