@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Electricity Definitions</title>
+    <title>Quiz</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts -->
@@ -32,7 +32,7 @@
     <header class="bg-white border-b border-slate-100 py-5 px-6 sticky top-0 z-50">
         <div class="max-w-3xl mx-auto grid grid-cols-3 items-center gap-2">
             <!-- Lighter Grey Title (Left) -->
-            <h1 class="text-sm sm:text-xl font-bold text-slate-400 tracking-tight text-left truncate">Electricity Definitions</h1>
+            <h1 class="text-sm sm:text-xl font-bold text-slate-400 tracking-tight text-left truncate">Quiz</h1>
             
             <!-- Centered Header Metrics Panel (Center) -->
             <div id="header-metrics" class="hidden flex justify-center items-center gap-2 sm:gap-4 text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-wider">
@@ -700,7 +700,7 @@
             document.getElementById('result-screen').classList.remove('hidden');
 
             const message = document.getElementById('result-message');
-            message.innerHTML = `congratulations <span class="text-indigo-600">${escapeHTML(state.userName)}</span>! you completed the <em>electricity definitions</em> challenge in <span class="text-slate-950 font-bold">${formatTime(state.timeElapsed)}</span>`;
+            message.innerHTML = `congratulations <span class="text-indigo-600">${escapeHTML(state.userName)}</span>! you completed the <em>quiz</em> in <span class="text-slate-950 font-bold">${formatTime(state.timeElapsed)}</span>`;
         }
 
         function restartQuiz() {
